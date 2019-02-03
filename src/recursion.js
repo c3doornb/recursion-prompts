@@ -7,31 +7,105 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+    var result = n;
+    
+    if (n < 0) {
+        return null;
+    }
+
+    if (n === 1 || n === 0) {
+        return 1;
+    }
+
+    return result * factorial(n - 1);
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
 var sum = function(array) {
+    if (array.length === 0) {
+        return 0;
+    }
+
+    return array[0] + sum(array.slice(1, array.length));
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+    if (array.length === 0) {
+        return 0;
+    }
+
+    if (Array.isArray(array[0])) {
+        return arraySum(array[0]) + arraySum(array.slice(1, array.length));
+    }
+
+    return array[0] + arraySum(array.slice(1, array.length));
 };
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+    if (n === 0) {
+        return true;
+    } else if (n === 1) {
+        return false;
+    }
+
+    let mod = 2;
+    if (n > 0) {
+        mod = -2;
+    }
+
+    return isEven(n + mod);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  if (n === 0) {
+    return 0;
+  }
+
+  let mod = 1;
+  if (n < 0) {
+    mod = -1;
+  }
+  return (n + sumBelow(n - mod) - mod);
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  let arr = [];
+
+  if (x === y || Math.abs(y - x) === 1) {
+    return [];
+  }
+
+  var mod = 1; 
+
+  if (Array.isArray(x)) {
+    if (x[0] > y) {
+        mod = -1;
+    }
+    for (var i = 0; i < x.length; i++) {
+        arr.push(x[i]);
+    }
+    arr.push(x[x.length - 1] + mod);
+
+    if (arr.length === Math.abs(y - x[0])) {
+      return arr;
+    }
+
+    return range(arr, y);
+  }
+
+  if (x > y) {
+    mod = -1;
+  }
+  return range([x + mod], y);
 };
 
 // 7. Compute the exponent of a number.
@@ -40,6 +114,19 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  if (exp === 0) {
+    return 1;
+  }
+
+  if (isEven(exp)) {
+      return exponent(base * base, exp / 2);
+  }
+
+  if (exp > 0) {
+    return base * exponent(base, exp - 1);
+  }
+
+  return 1 / base * exponent(base, exp + 1);
 };
 
 // 8. Determine if a number is a power of two.
@@ -47,14 +134,42 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+    if (n === 2 || n === 1) {
+        return true;
+    }
+
+    if (n === 0) {
+        return false;
+    }
+
+    if (Number.isInteger(n)) {
+        return powerOfTwo(n / 2);
+    }
+
+    return false;
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+    if (string.length === 1) {
+        return string;
+    }
+
+    return string[string.length - 1] + reverse(string.substring(0, string.length - 1));
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+    string = string.toUpperCase();
+    string = string.split(' ').join('');
+
+    if (string.length === 1) {
+        return true;
+    }
+    if (string.length < 1 || string[0] != string[string.length - 1]) {
+        return false;
+    }
+    return palindrome(string.substring(1, string.length - 1));
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -63,6 +178,24 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+    if (y === 0) {
+        return NaN;
+    }
+    if (x === 0) {
+        return 0;
+    }
+
+    if (x < y) {
+        return x;
+    }
+    if (x === y) {
+        return 0;
+    }
+    if (x < y + y) {
+        return x - y;
+    }
+
+    return modulo(x - y, y);
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
